@@ -2,6 +2,10 @@
 
 NestJS REST microservice for ExampleHR time-off request lifecycle, local balance projection, and defensive HCM integration.
 
+**Repository:** https://github.com/tgoliveira11/time-off-microservice
+
+**Technical requirements (TDR):** [`docs/Time-Off-Microservice-Technical-Requirement-Document.pdf`](docs/Time-Off-Microservice-Technical-Requirement-Document.pdf)
+
 This is a **take-home assignment implementation**. It is production-shaped in structure, but several concerns (auth, HCM, ops) are intentionally simplified or simulated.
 
 ## Architecture
