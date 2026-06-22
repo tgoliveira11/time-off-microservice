@@ -67,6 +67,34 @@ describe('TimeOffRequest Integration', () => {
     expect(second.body.requestId).toBe(first.body.requestId);
   });
 
+  it('returns same request when idempotency key is sent only in the body', async () => {
+    const seed = seedScenario(database, mockHcm);
+    const payload = {
+      employeeId: seed.employeeId,
+      locationId: seed.locationId,
+      amount: 2,
+      unit: 'DAYS',
+      startDate: '2026-07-10',
+      endDate: '2026-07-11',
+      idempotencyKey: 'swagger-body-key',
+    };
+
+    const first = await request(app.getHttpServer())
+      .post('/time-off-requests')
+      .set(authHeaders(seed.employeeId, 'EMPLOYEE'))
+      .send(payload)
+      .expect(200);
+
+    const second = await request(app.getHttpServer())
+      .post('/time-off-requests')
+      .set(authHeaders(seed.employeeId, 'EMPLOYEE'))
+      .send(payload)
+      .expect(200);
+
+    expect(second.body.requestId).toBe(first.body.requestId);
+    expect(second.body.availableBalanceAfterReservation).toBe(8);
+  });
+
   it('rejects request when insufficient balance', async () => {
     const seed = seedScenario(database, mockHcm, { balance: 1 });
 

@@ -2,18 +2,21 @@ import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import * as path from 'path';
 import * as fs from 'fs';
+import type { OpenAPIObject } from '@nestjs/swagger';
 import type { DatabaseService } from '../../src/database/database.service';
 import { PersistenceInfoService } from '../../src/database/persistence-info.service';
 import { resetPersistenceModeCacheForTests } from '../../src/database/persistence-mode';
 import { MockHcmService } from '../../src/modules/mock-hcm/mock-hcm.service';
 import { MetricsService } from '../../src/common/observability/metrics.service';
 import { DatabaseService as DatabaseServiceClass } from '../../src/database/database.service';
+import { setupSwagger } from '../../src/common/swagger/swagger.config';
 
 type TestAppResult = {
   app: INestApplication;
   mockHcm: MockHcmService;
   persistence: PersistenceInfoService;
   database?: DatabaseService;
+  swaggerDocument: OpenAPIObject;
 };
 
 async function bootstrapTestApp(): Promise<TestAppResult> {
@@ -30,6 +33,7 @@ async function bootstrapTestApp(): Promise<TestAppResult> {
       forbidNonWhitelisted: true,
     }),
   );
+  const swaggerDocument = setupSwagger(app);
   await app.init();
   await app.listen(0);
   const address = app.getHttpServer().address();
@@ -45,7 +49,7 @@ async function bootstrapTestApp(): Promise<TestAppResult> {
     database = app.get(DatabaseServiceClass);
   }
 
-  return { app, mockHcm, persistence, database };
+  return { app, mockHcm, persistence, database, swaggerDocument };
 }
 
 export async function createSqliteTestApp(dbPath?: string): Promise<

@@ -5,8 +5,10 @@ import { ObservabilityModule } from './common/observability/observability.module
 import { EmployeesModule } from './modules/employees/employees.module';
 import { TimeOffRequestsModule } from './modules/time-off-requests/time-off-requests.module';
 import { SystemModule } from './modules/system/system.module';
+import { DemoModule } from './demo/demo.module';
 import { HealthModule } from './modules/health/health.module';
 import { MockHcmModule } from './modules/mock-hcm/mock-hcm.module';
+import { SqliteModule } from './modules/sqlite/sqlite.module';
 import { HcmModule } from './modules/hcm/hcm.module';
 import { AuthGuard } from './common/auth/auth.guard';
 import { EmployeeAccessGuard } from './common/auth/employee-access.guard';
@@ -22,9 +24,11 @@ import { RequestValidationService } from './domain/request-validation.service';
 @Module({
   imports: [
     DatabaseModule.register(),
+    DemoModule,
     ObservabilityModule,
     HcmModule,
     MockHcmModule,
+    SqliteModule,
     EmployeesModule,
     TimeOffRequestsModule,
     SystemModule,

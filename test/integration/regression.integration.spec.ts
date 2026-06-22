@@ -161,7 +161,7 @@ describe('Regression Tests', () => {
         `/employees/${seed.employeeId}/locations/${seed.locationId}/balances/refresh`,
       )
       .set(authHeaders(seed.employeeId, 'EMPLOYEE'))
-      .expect(201);
+      .expect(200);
 
     expect(refreshed.body.hcmBalance).toBe(15);
     expect(refreshed.body.source).toBe('HCM_REALTIME');
