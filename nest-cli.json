@@ -5,6 +5,15 @@
   "compilerOptions": {
     "deleteOutDir": true,
     "assets": ["database/schema.sql"],
-    "watchAssets": true
+    "watchAssets": true,
+    "plugins": [
+      {
+        "name": "@nestjs/swagger",
+        "options": {
+          "classValidatorShim": true,
+          "introspectComments": true
+        }
+      }
+    ]
   }
 }

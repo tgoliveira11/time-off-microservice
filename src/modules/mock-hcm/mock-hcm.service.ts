@@ -1,5 +1,6 @@
 import { Injectable, HttpException } from '@nestjs/common';
 import { throwHcmError } from './mock-hcm.errors';
+import { DEFAULT_MOCK_HCM_SEED } from './mock-hcm-defaults';
 
 export interface MockBalance {
   employeeId: string;
@@ -29,15 +30,21 @@ export class MockHcmService {
     this.scenarios.clear();
   }
 
-  seed(data: Record<string, unknown>): void {
-    if (Array.isArray(data.balances)) {
-      for (const item of data.balances as MockBalance[]) {
+  seed(data: Record<string, unknown> = {}): void {
+    const balances = Array.isArray(data.balances) ? data.balances : [];
+    const payload =
+      balances.length > 0
+        ? data
+        : { ...data, balances: DEFAULT_MOCK_HCM_SEED.balances };
+
+    if (Array.isArray(payload.balances)) {
+      for (const item of payload.balances as MockBalance[]) {
         this.setBalance(item);
       }
     }
-    if (data.scenarios && typeof data.scenarios === 'object') {
+    if (payload.scenarios && typeof payload.scenarios === 'object') {
       for (const [key, value] of Object.entries(
-        data.scenarios as Record<string, string>,
+        payload.scenarios as Record<string, string>,
       )) {
         this.scenarios.set(key, value);
       }
